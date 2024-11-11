@@ -2,27 +2,45 @@
 
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import { useState } from 'react';
+
 
 export default function Login() {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const router = useRouter();
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const onSubmit = async (data) => {
-    const response = await fetch('http://localhost:1337/api/auth/local', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+    try {
+      const response = await axios.post('http://localhost:1337/api/auth/local', {
         identifier: data.identifier,
         password: data.password,
-      }),
-    });
-
-    if (response.ok) {
+      });
+  
+      if (response.status !== 200) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const { jwt, user } = response.data;
+  
+      if (user && user.isAdmin) {
+        setIsAdmin(true);
+        localStorage.setItem("jwt-token", jwt);
+        router.push('/pages/admin'); 
+      } else {
+        setIsAdmin(false);
+        router.push('/pages/homepage'); 
+      }
       alert('Login successful');
-      router.push('/pages/homepage');
-    } else {
-      const errorData = await response.json();
-      alert(errorData.message || 'Login failed');
+      
+        // {
+        // pathname: '/pages/homepage',
+        // query: { isAdmin: user?.isAdmin },
+      // }
+    } catch (error) {
+      console.error("Login error:", error);
+      alert(error.message || 'Login failed');
     }
   };
 
@@ -32,7 +50,7 @@ export default function Login() {
         <h2 className="text-2xl font-bold text-center text-gray-800">Login</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="flex flex-col">
-            <label className="text-gray-600">Username</label>
+            <label className="text-gray-600">Email</label>
             <input
               type="text"
               {...register('identifier', { required: 'Username is required' })}
@@ -63,4 +81,5 @@ export default function Login() {
     </div>
   );
 }
+
 

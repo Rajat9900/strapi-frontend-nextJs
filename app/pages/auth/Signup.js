@@ -2,12 +2,17 @@
 
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { useState } from 'react';
 
 export default function Signup() {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const router = useRouter();
+  const [isAdmin, setIsAdmin] = useState(false); 
 
   const onSubmit = async (data) => {
+    data.isAdmin = isAdmin; 
+
     const response = await fetch('http://localhost:1337/api/auth/local/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -16,7 +21,7 @@ export default function Signup() {
 
     if (response.ok) {
       alert('Signup successful');
-      router.push('pages/auth/login');
+      router.push('/pages/auth/login');
     } else {
       const errorData = await response.json();
       alert(errorData.message || 'Signup failed');
@@ -64,8 +69,23 @@ export default function Signup() {
             {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>}
           </div>
 
+          <div className="flex flex-col">
+            <label className="text-gray-600">Role</label>
+            <select
+              onChange={(e) => setIsAdmin(e.target.value === 'admin')}
+              className="mt-1 p-2 border rounded-md focus:outline-none border-gray-300 focus:ring-blue-500"
+            >
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+
+          <div>
+            <p>Already have an account? <span className='text-blue-700'><Link href='/pages/auth/login'>Login</Link></span></p>
+          </div>
+
           <button type="submit" className="w-full p-2 mt-4 text-white bg-green-600 rounded-md hover:bg-green-800">
-            Sign Up
+            Sign Up 
           </button>
         </form>
       </div>

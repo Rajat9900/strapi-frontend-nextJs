@@ -3,10 +3,11 @@ import Signup from "./pages/auth/Signup";
 import Login from "./pages/auth/login/page";
 import Navbar from "./components/Navbar";
 
-export default function Home() {
+export default async function Home() {
+
   return (
     <div >  
-      {/* <Navbar/>   */}
+      <Navbar/>  
     <Signup/>
    {/* <Login/> */}
    {/* home page */}

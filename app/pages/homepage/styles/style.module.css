@@ -1,0 +1,27 @@
+.CoreFeatures{
+    width: 100%;
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+}
+
+.CoreFeature1{
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+  justify-content: center;
+align-items: center;
+}
+.CoreFeature1 h2{
+    font-size: 42px;
+    line-height: .8;
+    margin: 0 0 15px;
+    font-weight: 700;
+}
+.CoreFeature2{
+    display: flex;
+    gap: 10px;
+}
+.CoreFeature2 h4{
+    font-weight: 800;
+}

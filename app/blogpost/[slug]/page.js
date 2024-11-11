@@ -25,7 +25,7 @@ export default  function Page({ params }) {
         <div className="min-h-screen bg-gray-100 py-8 px-4">
             <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-8">
                 <h1 className="text-4xl font-bold text-gray-800 mb-4">
-                    Blog Title: {response && response.data[0].slug}
+                    Blog Title: {response && response.data[0].title}
                 </h1>
                 <p className="text-gray-500 mb-8">
                     Published on{" "}
